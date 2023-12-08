@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 function createRandomPost() {
@@ -50,53 +50,60 @@ function App() {
         <button onClick={() => setIsFakeDark((isFakeDark) => !isFakeDark)} className="btn-fake-dark-mode">
           {isFakeDark ? '☀️' : '🌙'}
         </button>
-        <Header
-          posts={searchedPosts}
-          onClearPosts={handleClearPosts}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-        <Main posts={searchedPosts} onAddPost={handleAddPost} />
-        <Archive onAddPost={handleAddPost} />
+        <Header />
+        <Main />
+        <Archive />
         <Footer />
       </section>
     </AppContext.Provider>
   )
 }
 
-function Header({ posts, onClearPosts, searchQuery, setSearchQuery }) {
+function Header() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { onClearPosts } = useContext(AppContext)
+
   return (
     <header>
       <h1>
         <span>⚛️</span>The Atomic Blog
       </h1>
       <div>
-        <Results posts={posts} />
-        <SearchPosts searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <Results />
+        <SearchPosts />
         <button onClick={onClearPosts}>Clear posts</button>
       </div>
     </header>
   )
 }
 
-function SearchPosts({ searchQuery, setSearchQuery }) {
+function SearchPosts() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { searchQuery, setSearchQuery } = useContext(AppContext)
+
   return <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search posts..." />
 }
 
-function Results({ posts }) {
+function Results() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { posts } = useContext(AppContext)
+
   return <p>🚀 {posts.length} atomic posts found</p>
 }
 
-function Main({ posts, onAddPost }) {
+function Main() {
   return (
     <main>
-      <FormAddPost onAddPost={onAddPost} />
-      <Posts posts={posts} />
+      <FormAddPost />
+      <Posts />
     </main>
   )
 }
 
-function Posts({ posts }) {
+function Posts() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { posts } = useContext(AppContext)
+
   return (
     <section>
       <List posts={posts} />
@@ -104,7 +111,10 @@ function Posts({ posts }) {
   )
 }
 
-function FormAddPost({ onAddPost }) {
+function FormAddPost() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { onAddPost } = useContext(AppContext)
+
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
 
@@ -138,7 +148,10 @@ function List({ posts }) {
   )
 }
 
-function Archive({ onAddPost }) {
+function Archive() {
+  // 3. CONSUME VALUE FROM CONTEXT
+  const { onAddPost } = useContext(AppContext)
+
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>
     // 💥 WARNING: This might make your computer slow! Try a smaller `length` first
