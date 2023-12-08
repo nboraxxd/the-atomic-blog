@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import AppProvider, { AppContext } from './AppContext'
+import { useEffect, useState } from 'react'
+import AppProvider, { useApp } from './AppContext'
 import { createRandomPost } from './helper'
 
 export default function App() {
@@ -28,7 +28,7 @@ export default function App() {
 
 function Header() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { onClearPosts } = useContext(AppContext)
+  const { onClearPosts } = useApp()
 
   return (
     <header>
@@ -46,14 +46,14 @@ function Header() {
 
 function SearchPosts() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { searchQuery, setSearchQuery } = useContext(AppContext)
+  const { searchQuery, setSearchQuery } = useApp()
 
   return <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search posts..." />
 }
 
 function Results() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { posts } = useContext(AppContext)
+  const { posts } = useApp()
 
   return <p>🚀 {posts.length} atomic posts found</p>
 }
@@ -69,7 +69,7 @@ function Main() {
 
 function Posts() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { posts } = useContext(AppContext)
+  const { posts } = useApp()
 
   return (
     <section>
@@ -80,7 +80,7 @@ function Posts() {
 
 function FormAddPost() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { onAddPost } = useContext(AppContext)
+  const { onAddPost } = useApp()
 
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -117,7 +117,7 @@ function List({ posts }) {
 
 function Archive() {
   // 3. CONSUME VALUE FROM CONTEXT
-  const { onAddPost } = useContext(AppContext)
+  const { onAddPost } = useApp()
 
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>

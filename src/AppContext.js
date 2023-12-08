@@ -1,8 +1,8 @@
-import { createContext, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { createRandomPost } from './helper'
 
 // 1. CREATE A CONTEXT
-export const AppContext = createContext()
+const AppContext = createContext()
 
 export default function AppProvider({ children }) {
   const [posts, setPosts] = useState(() => Array.from({ length: 30 }, () => createRandomPost()))
@@ -36,4 +36,13 @@ export default function AppProvider({ children }) {
       {children}
     </AppContext.Provider>
   )
+}
+
+export function useApp() {
+  const context = useContext(AppContext)
+  if (context === undefined) {
+    throw new Error('useApp must be used within a AppProvider')
+  }
+
+  return context
 }
