@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import AppProvider, { useApp } from './AppContext'
 import { createRandomPost } from './helper'
-import Test from './Test'
+// import Test from './Test'
 
 export default function App() {
   const [isFakeDark, setIsFakeDark] = useState(false)
@@ -59,14 +59,14 @@ function Results() {
   return <p>🚀 {posts.length} atomic posts found</p>
 }
 
-function Main() {
+const Main = memo(function Main() {
   return (
     <main>
       <FormAddPost />
       <Posts />
     </main>
   )
-}
+})
 
 function Posts() {
   // 3. CONSUME VALUE FROM CONTEXT
@@ -114,7 +114,7 @@ function List({ posts }) {
           </li>
         ))}
       </ul>
-      <Test />
+      {/* <Test /> */}
     </>
   )
 }

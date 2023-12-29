@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 import { createRandomPost } from './helper'
 
 // 1. CREATE A CONTEXT
@@ -22,16 +22,20 @@ export default function AppProvider({ children }) {
     setPosts([])
   }
 
-  return (
-    // 2. PROVIDE VALUE TO CHILD COMPONENTS
-    <AppContext.Provider
-      value={{
-        posts: searchedPosts,
+  const value = useMemo(() => {
+    return {
+      posts: searchedPosts,
         onAddPost: handleAddPost,
         onClearPosts: handleClearPosts,
         searchQuery,
         setSearchQuery,
-      }}
+    }
+  }, [searchQuery, searchedPosts])
+
+  return (
+    // 2. PROVIDE VALUE TO CHILD COMPONENTS
+    <AppContext.Provider
+      value={value}
     >
       {children}
     </AppContext.Provider>
